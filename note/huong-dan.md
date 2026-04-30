@@ -226,7 +226,47 @@ npm install
 npm install antd axios
 ```
 
-### 4.2 Cấu trúc thư mục
+### 4.2 Giải thích file JSX
+
+**JSX là gì?**
+JSX = JavaScript + XML. Cho phép viết HTML trực tiếp trong JavaScript.
+
+**Component là gì?**
+Component là một hàm JavaScript trả về giao diện (JSX). Tên component **phải viết hoa chữ đầu**.
+
+```jsx
+// Định nghĩa component
+export default function TestModelPage() {
+    return <div>Nội dung trang</div>
+}
+```
+
+**Cách dùng component:**
+
+| JavaScript thuần | React JSX |
+|-----------------|-----------|
+| `TestModelPage()` | `<TestModelPage />` |
+
+React dựa vào **chữ hoa đầu** để phân biệt:
+- `<TestModelPage />` → component tự viết (gọi hàm)
+- `<div>`, `<table>` → HTML tag thông thường
+
+**Ví dụ trong App.jsx:**
+```jsx
+import TestModelPage from './pages/TestModelPage'
+
+function App() {
+    return (
+        <div>
+            <TestModelPage />   {/* React gọi hàm TestModelPage() và render kết quả */}
+        </div>
+    )
+}
+```
+
+---
+
+### 4.3 Cấu trúc thư mục
 
 ```
 frontend/src/
@@ -303,22 +343,57 @@ export default function ProductPage() {
 }
 ```
 
-### 4.5 src/App.jsx
+### 4.5 React Router
+
+Cài đặt:
+
+```bash
+npm install react-router-dom
+```
+
+**Các khái niệm:**
+
+| Component | Vai trò |
+|-----------|---------|
+| `<BrowserRouter>` | Bọc toàn bộ app, kích hoạt tính năng routing |
+| `<Routes>` | Khu vực chứa các route |
+| `<Route path="..." element={...}>` | Map URL → component |
+| `<Link to="...">` | Thay thế thẻ `<a>`, chuyển trang không reload |
+
+### 4.6 src/App.jsx
 
 ```jsx
-import ProductPage from "./pages/ProductPage";
+import { BrowserRouter, Routes, Route, Link } from 'react-router-dom'
+import { Menu } from 'antd'
+import ProductPage from './pages/ProductPage'
+import TestModelPage from './pages/TestModelPage'
+
+const menuItems = [
+    { key: '/products', label: <Link to="/products">Products</Link> },
+    { key: '/test-models', label: <Link to="/test-models">Test Models</Link> },
+]
 
 function App() {
-  return (
-    <div style={{ padding: 24 }}>
-      <h1>Quản lý sản phẩm</h1>
-      <ProductPage />
-    </div>
-  );
+    return (
+        <BrowserRouter>
+            <Menu mode="horizontal" items={menuItems} />
+            <div style={{ padding: 24 }}>
+                <Routes>
+                    <Route path="/products" element={<ProductPage />} />
+                    <Route path="/test-models" element={<TestModelPage />} />
+                </Routes>
+            </div>
+        </BrowserRouter>
+    )
 }
 
-export default App;
+export default App
 ```
+
+**Mỗi khi thêm trang mới:**
+1. Tạo file `pages/TenTrang.jsx`
+2. Thêm 1 dòng vào `menuItems`
+3. Thêm 1 dòng `<Route>` vào `<Routes>`
 
 ### 4.6 Chạy React
 
