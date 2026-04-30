@@ -8,7 +8,16 @@ class Product(models.Model):
     def __str__(self):
         return self.name
     
-class TestModel (models.Model):
+class TestModel(models.Model):
     name = models.CharField(max_length=255)
     update_date = models.DateField()
+
+    def __str__(self):
+        return self.name
     
+class Test2(models.Model):
+    title = models.CharField(max_length = 200)
+    value = models.IntegerField()
+    
+    def __str__(self):
+        return self.name
